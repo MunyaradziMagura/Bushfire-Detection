@@ -17,7 +17,6 @@ fig, ax = plt.subplots()
 #check if point is in radius 
 def euclidean_distance(target_x,target_y,drone_x,drone_y):
     return math.sqrt((target_x-drone_x)**2+(target_y-drone_y)**2)
-print(euclidean_distance(30,2,2,30))
 
 #check if drone is in range of fire
 if euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[0][0],drone_XY[0][1]) > 10:
@@ -25,47 +24,42 @@ if euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[0][0],drone_XY[0][1])
     direction = True
     change_direction = 0
 
-    for drone in range(150):
-        movement = 1
-        print(change_direction)
+    for drone in range(1200):
         
+        if euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[-1][0],drone_XY[-1][1]) <= 10 :
+            print("FOUND!!!")
+            print(euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[-1][0],drone_XY[-1][1]))
+            break
         
-        #drone will move up
-        if change_direction < 10: 
-            drone_XY.append(tuple((drone_XY[-1][0],drone_XY[-1][1] + movement)))
-            
-        # turn left
-        elif change_direction > 10:
-            
-            if direction == True:
-                # the drone is on the left border
-                drone_XY.append(tuple((drone_XY[-1][0] + movement,drone_XY[-1][1])))
+        # check the drone is still in bounds
+        if drone_XY[-1][1] <= depth:
+            movement = 1
+            #drone will move up
+            if change_direction < 10: 
+                drone_XY.append(tuple((drone_XY[-1][0],drone_XY[-1][1] + movement)))
                 
-                if drone_XY[-1][0] > width:
-                    change_direction = 0
-                    direction = False
+            # turn left
+            elif change_direction > 10:
+                
+                if direction == True:
+                    # the drone is on the left border
+                    drone_XY.append(tuple((drone_XY[-1][0] + movement,drone_XY[-1][1])))
                     
-            if direction == False: 
-                drone_XY.append(tuple((drone_XY[-1][0] - movement,drone_XY[-1][1])))
-                
-                if drone_XY[-1][0] <= 0:
-                    change_direction = 0
-                    direction = True
-        
-        
-        
-        change_direction += movement         
+                    if drone_XY[-1][0] > width:
+                        change_direction = 0
+                        direction = False
+                        
+                if direction == False: 
+                    drone_XY.append(tuple((drone_XY[-1][0] - movement,drone_XY[-1][1])))
+                    
+                    if drone_XY[-1][0] <= 0:
+                        change_direction = 0
+                        direction = True
+            change_direction += movement         
 
     
+print(drone_XY)
 
-# example of your output – list of tuple with coordinates
-#drone_XY = [(0.0, 0.0),
-#(0.7, 0.7),
-#(0.7, 1.7),
-#(0.7, 2.7),
-#(1.7, 2.7),
-#(25,25),
-#(25,10)]
 # code to plot drone trajectory
 
 xs, ys = zip(*drone_XY)
