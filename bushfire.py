@@ -19,18 +19,20 @@ def euclidean_distance(target_x,target_y,drone_x,drone_y):
     return math.sqrt((target_x-drone_x)**2+(target_y-drone_y)**2)
 
 #check if drone is in range of fire
-if euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[0][0],drone_XY[0][1]) > 10:
+if euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[0][0],drone_XY[0][1]) > R:
     # if direction is TRUE the drone will go right. if FALSE it will go left. if NONE it will not move in the x direction
     direction = True
     change_direction = 0
 
     for drone in range(1200):
-        
-        if euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[-1][0],drone_XY[-1][1]) <= 10 :
-            print("FOUND!!!")
-            print(euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[-1][0],drone_XY[-1][1]))
+        # check if fire has been found
+        if euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[-1][0],drone_XY[-1][1]) <= R :
             break
         
+        # drone has no more fuel
+        if drone > 1200:
+            print("out of fuel...drone has crashed, starting another fire on impact")
+            break
         # check the drone is still in bounds
         if drone_XY[-1][1] <= depth:
             movement = 1
@@ -57,8 +59,16 @@ if euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[0][0],drone_XY[0][1])
                         direction = True
             change_direction += movement         
 
-    
-print(drone_XY)
+if euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[-1][0],drone_XY[-1][1]) <= R :
+    print("\ndrone location")
+    print(drone_XY[-1])
+    print("\neuclidean distance")
+    print(euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[-1][0],drone_XY[-1][1]))
+    print("\nfire location")
+    print(hotspot_XY)
+    print("\ndrone took " + str(len(drone_XY)) + " seconds or ~" +str(round(len(drone_XY) / 60, 2) ) + " minutes to find the fire")
+    print("\ndrone path")
+    print(drone_XY)
 
 # code to plot drone trajectory
 
