@@ -6,6 +6,7 @@ import time
 # input parameters for drone
 V = 1 # drone speed per second
 R = 10 # radius how far drone can see
+Fuel = 1200
 drone_XY = [(0.0, 0.0)] # initial coordinates of the drone
 # input parameters for map and hotspot
 width, depth = 50, 50
@@ -24,13 +25,13 @@ if euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[0][0],drone_XY[0][1])
     direction = True
     change_direction = 0
 
-    for drone in range(1200):
+    for drone in range(Fuel):
         # check if fire has been found
         if euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[-1][0],drone_XY[-1][1]) <= R :
             break
         
         # drone has no more fuel
-        if drone > 1200:
+        if drone > Fuel:
             print("out of fuel...drone has crashed, starting another fire on impact")
             break
         
