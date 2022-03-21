@@ -20,7 +20,7 @@ def euclidean_distance(target_x,target_y,drone_x,drone_y):
 
 #check if drone is in range of fire
 if euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[0][0],drone_XY[0][1]) > R:
-    # if direction is TRUE the drone will go right. if FALSE it will go left. if NONE it will not move in the x direction
+    # if direction is TRUE the drone will go right. if FALSE it will go left
     direction = True
     change_direction = 0
 
@@ -33,24 +33,25 @@ if euclidean_distance(hotspot_XY[0],hotspot_XY[1],drone_XY[0][0],drone_XY[0][1])
         if drone > 1200:
             print("out of fuel...drone has crashed, starting another fire on impact")
             break
+        
         # check the drone is still in bounds
         if drone_XY[-1][1] <= depth:
             movement = 1
             #drone will move up
-            if change_direction < 10: 
+            if change_direction < R: 
                 drone_XY.append(tuple((drone_XY[-1][0],drone_XY[-1][1] + movement)))
                 
-            # turn left
-            elif change_direction > 10:
-                
+            
+            elif change_direction > R:
+                # turn right
                 if direction == True:
                     # the drone is on the left border
                     drone_XY.append(tuple((drone_XY[-1][0] + movement,drone_XY[-1][1])))
-                    
+                    # check if the drone is out of bounds
                     if drone_XY[-1][0] > width:
                         change_direction = 0
                         direction = False
-                        
+                # turn left
                 if direction == False: 
                     drone_XY.append(tuple((drone_XY[-1][0] - movement,drone_XY[-1][1])))
                     
